@@ -6,19 +6,21 @@ Experiments on C Exploits
 
 - 64 bit Linux Systems
 
-## Dynamic (c)
+## Completed Challenges
+
+### - Dynamic (c)
 
 - Loads string compare function on runtime
 - Self modifies strlen comparison value
 - Hides string using bit addition
 
-## Load (cpp)
+### - Load (cpp)
 
 - Loads compiled library file on runtime
 - Loads string compare function from loaded library
 - Hides string using XOR from templates
 
-## Rewrite (cc)
+### - Rewrite (cc)
 
 - Spawns/Clones secondary process for self modification
 - Secondary process modifies /proc/{pid}/mem of primary process
