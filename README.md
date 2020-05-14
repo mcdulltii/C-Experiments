@@ -11,7 +11,7 @@ Experiments on C Exploits
 - Loads string compare function from loaded library
 - Hides string using XOR from templates
 
-## Rewrite (c)
+## Rewrite (cc)
 - Spawns/Clones secondary process for self modification
 - Secondary process modifies /proc/{pid}/mem of primary process
 - Hides string using bit addition

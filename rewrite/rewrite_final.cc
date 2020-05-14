@@ -51,6 +51,7 @@ int main(void)
         puts("Incorrect");
         return 1;
     }
+    
     // Spawn child process
     f = fork();
     pid = 0;
@@ -76,6 +77,7 @@ int main(void)
             puts("Incorrect");
             return 1;
         }
+
         // Read /proc/{pid}/mem to overwrite string s within process's virtual memory
         out = mm(&ad, &leng, &pid, mmy, sizeof(mmy)/sizeof(mmy[0]), nd, sizeof(nd)/sizeof(nd[0]));
         if (out==1) {
@@ -90,6 +92,7 @@ int main(void)
         close(pip1[0]);
         close(pip2[0]);
         close(pip3[0]);
+
         // Calculate address, length of string and pid of process, and read input
         inp = fp(&ad, &leng, &pid);
         sprintf(ad_buf, "%lx", ad);
