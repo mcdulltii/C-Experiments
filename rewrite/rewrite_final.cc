@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/ptrace.h>
 
 void sp(char*);
 char* fp(unsigned long int*, unsigned long*, int*);
@@ -20,6 +22,12 @@ char s[512]={0};
 char *adr, *pm, *ad1, *ad2;
 int out, cnt = 2;
 
+// Check debugger
+int gdb(void *add) {
+    if (ptrace(PTRACE_TRACEME, 0, NULL, 0) == -1) return 1;
+    return 0;
+}
+
 int main(void)
 {
     pid_t f;
@@ -29,11 +37,15 @@ int main(void)
     unsigned long leng;
     int pid;
 
+    if (gdb()) exit(0);
+
+    // Obfuscated strings (0x1A for first three, then 0x56)
     int hp[] = {0x75,0x82,0x7f,0x7b,0x8a,0x77,0x1a,};
     int mps[] = {0x49,0x8a,0x8c,0x89,0x7d,0x49,0x3f,0x7e,0x49,0x87,0x7b,0x8a,0x8d,0x1a,};
     int mmy[] = {0x49,0x8a,0x8c,0x89,0x7d,0x49,0x3f,0x7e,0x49,0x87,0x7f,0x87,0x1a,};
     int nd[] = {0x8b,0x89,0x87,0xbc,0xb5,0xc3,0x86,0xba,0x87,0xbc,0xcf,0x87,0xc4,0xbd,0xb5,0x8a,0x87,0x8d,0x89,0xc8,0xc4,0x8a,0x8d,0x87,0xcc,0x89,0xb5,0x89,0x8f,0x8a,0x8d,0x8b,0x8e,0x88,0x8f,0x56,};
 
+    // Pipe for parent and child process, to transfer pid, address and length of string s
     int pip1[2];
     int pip2[2];
     int pip3[2];
@@ -42,12 +54,14 @@ int main(void)
         return 1;
     }
 
+    // String s to be changed
     c(s, 'T','h','i','s','_','I','n','i','t','i','a','l','_','D','a','t','a','_','i','s','_','s','t','i','l','l','_','n','o','t','_','e','n','o','u','g','h','\0');
     if (s == NULL)
     {
         puts("Incorrect");
         return 1;
     }
+    // Spawn child process
     f = fork();
     pid = 0;
     if (f < 0) {
@@ -61,15 +75,18 @@ int main(void)
         read(pip2[0], leng_buf, 100);
         read(pip3[0], pid_buf, 100);
         
+        // Convert address, length of string and pid of process
         ad = strtoul(ad_buf, NULL, 16);
         leng = strtol(leng_buf, NULL, 10);
         pid = strtol(pid_buf, NULL, 10);
 
+        // Read /proc/{pid}/maps to find address of [heap]
         out = mp(&ad, &leng, &pid, hp, sizeof(hp)/sizeof(hp[0]), mps, sizeof(mps)/sizeof(mps[0]));
         if (out==1) {
             puts("Incorrect");
             return 1;
         }
+        // Read /proc/{pid}/mem to overwrite string s within process's virtual memory
         out = mm(&ad, &leng, &pid, mmy, sizeof(mmy)/sizeof(mmy[0]), nd, sizeof(nd)/sizeof(nd[0]));
         if (out==1) {
             puts("Incorrect");
@@ -83,6 +100,7 @@ int main(void)
         close(pip1[0]);
         close(pip2[0]);
         close(pip3[0]);
+        // Calculate address, length of string and pid of process, and read input
         inp = fp(&ad, &leng, &pid);
         sprintf(ad_buf, "%lx", ad);
         sprintf(leng_buf, "%lu", leng);
@@ -95,6 +113,7 @@ int main(void)
         write(pip3[1], pid_buf, strlen(pid_buf)+1);
         close(pip3[1]);
 
+        // Validate input and run process for string overwrite
         sp(inp);
 
         free(ad_buf);
@@ -104,6 +123,7 @@ int main(void)
     return 0;
 }
 
+// Concatenate char array to string
 void c(char *buf, ...) {
     va_list args;
     va_start (args, buf);
@@ -116,8 +136,8 @@ void c(char *buf, ...) {
     va_end (args);
 }
 
-char *de(int *ary, int c, int lng)
-{
+// Decode int array by minusing int c, for length lng
+char *de(int *ary, int c, int lng) {
     char *ml;
     ml = (char*)malloc(sizeof(char*));
     for (int i=0; i<lng; i++) {
@@ -126,6 +146,7 @@ char *de(int *ary, int c, int lng)
     return ml;
 }
 
+// Calculate address, and length of string, pid of process, and read input
 char* fp(unsigned long int* ad, unsigned long* leng, int* pid) {
     *pid = getpid();
     *ad = (long unsigned int)s;
@@ -136,6 +157,7 @@ char* fp(unsigned long int* ad, unsigned long* leng, int* pid) {
     return inp;
 }
 
+// Validate input and run process for string overwrite
 void sp(char* inp) {
     unsigned long int i = 0;
     inp[strlen(inp)-1] = 0;
@@ -152,10 +174,12 @@ void sp(char* inp) {
     return;
 }
 
+// Prints prompt
 void flag(void) {
     printf("Guess the flag?\n");
 }
 
+// String compare input with overwritten string s
 void chk(char* val, char* inp) {
     if (!strcmp(val, inp)) {
         puts("Correct");
@@ -165,6 +189,7 @@ void chk(char* val, char* inp) {
     return;
 }
 
+// Read /proc/{pid}/maps to find address of [heap]
 int mp(unsigned long int* ad, unsigned long* leng, int* pid, int* hp, int lng1, int* mps, int lng2) {
     FILE *ptr;
     char *fl, *line;
@@ -191,6 +216,7 @@ int mp(unsigned long int* ad, unsigned long* leng, int* pid, int* hp, int lng1, 
     return 0;
 }
 
+// Read /proc/{pid}/mem to overwrite string s within process's virtual memory
 int mm(unsigned long int* ad, unsigned long* leng, int* pid, int* mmy, int lng1, int* nd, int lng2) {
     char *fl, *buf = (char*)malloc(*leng);
     fl = (char*)malloc(sizeof(char*));

@@ -18,7 +18,7 @@ int bf (void *ad);
 void ch (void);
 void __attribute__((constructor)) flag (void); 
 
-// Check debugger and replace fgets value with 0x24
+// Check debugger and replace strlen value with 0x24
 int gdb(void *add) {
     if (ptrace(PTRACE_TRACEME, 0, NULL, 0) == -1) return 1;
     unsigned char *ins = (unsigned char*)add + 84;

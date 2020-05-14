@@ -3,7 +3,7 @@ Experiments on C Exploits
 
 ## Dynamic (c)
 - Loads string compare function on runtime
-- Self modifies strlen compare
+- Self modifies strlen comparison value
 - Hides string using bit addition
 
 ## Load (cpp)
@@ -12,6 +12,6 @@ Experiments on C Exploits
 - Hides string using XOR from templates
 
 ## Rewrite (c)
-- Spawns/Clones new process for alternative to self modification
+- Spawns/Clones secondary process for self modification
 - Secondary process modifies /proc/{pid}/mem of primary process
-- TBC
+- Hides string using bit addition
