@@ -6,8 +6,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <sys/types.h>
-#include <sys/ptrace.h>
 
 void sp(char*);
 char* fp(unsigned long int*, unsigned long*, int*);
@@ -22,12 +20,6 @@ char s[512]={0};
 char *adr, *pm, *ad1, *ad2;
 int out, cnt = 2;
 
-// Check debugger
-int gdb(void *add) {
-    if (ptrace(PTRACE_TRACEME, 0, NULL, 0) == -1) return 1;
-    return 0;
-}
-
 int main(void)
 {
     pid_t f;
@@ -36,8 +28,6 @@ int main(void)
     unsigned long int ad;
     unsigned long leng;
     int pid;
-
-    if (gdb()) exit(0);
 
     // Obfuscated strings (0x1A for first three, then 0x56)
     int hp[] = {0x75,0x82,0x7f,0x7b,0x8a,0x77,0x1a,};
@@ -55,7 +45,7 @@ int main(void)
     }
 
     // String s to be changed
-    c(s, 'T','h','i','s','_','I','n','i','t','i','a','l','_','D','a','t','a','_','i','s','_','s','t','i','l','l','_','n','o','t','_','e','n','o','u','g','h','\0');
+    c(s, 'I','s','_','t','h','i','s','_','b','i','n','a','r','y','_','s','o','_','h','a','r','d','_','t','o','_','r','e','v','e','r','s','e','?','?','?','?','\0');
     if (s == NULL)
     {
         puts("Incorrect");
