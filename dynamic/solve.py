@@ -10,7 +10,7 @@ ELF Strings REF
 Guess the flag?
 iciicicciciicicicciciiciicciiciciic
 Correct
-<35 Rows of (OFFSET)\x__ Characters>
+<35 Rows of (OFFSET)0x__ Characters>
 """
 
 encoded_flag = f[f.find('Correct')+len('Correct'):][:35]
