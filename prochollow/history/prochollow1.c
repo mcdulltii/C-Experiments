@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 		write(pid_pipe[1], pid_buf, strlen(pid_buf)+1);
 		close(pid_pipe[1]);
 		ptrace(PTRACE_TRACEME, 0, 0, 0);
-		execv("./hello", argv);
+		execv("./hello1", argv);
 		free(pid_buf);
         break;
     case -1:
