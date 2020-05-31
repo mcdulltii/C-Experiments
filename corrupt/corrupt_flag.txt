@@ -1,0 +1,6 @@
+> nasm -f bin -o corrupt corrupt_final.asm
+
+
+Input: Why_c4nt_1_d3c0mp1l3_th1s__________________d9
+
+Flag: A5M_15n't_th4t_34sy_4ft3r_4ll_4857614902
