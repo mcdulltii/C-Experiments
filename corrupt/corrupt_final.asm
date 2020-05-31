@@ -45,7 +45,7 @@
                 
                 mov     esi, key                ; key
                 mov     edi, input              ; input
-                mov     ecx, klen-19             ; len(key)
+                mov     ecx, klen-19            ; len(key)
                 cld
                 repe    cmpsb                   ; strncmp(key, input, len(key))
                 jecxz   decode                  ; if ecx == 0
