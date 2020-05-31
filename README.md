@@ -26,6 +26,12 @@ Experiments on C Exploits
 - Secondary process modifies the heap from /proc/{pid}/mem of primary process
 - Hides string using bit addition
 
+### - Corrupt (asm)
+
+- Collapsed ELF header with precompiled statically linked _start function
+- Uses truncated input as key, for decoding of flag
+- Anti-debugging from corrupted header and invalid executable entry point e_entry
+
 ## Extras
 
 ### - Screwed (c)
