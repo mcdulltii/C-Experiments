@@ -20,7 +20,20 @@
 
 - With trial and error, 2 bytes in the input are used in decoding the hex array, which are the 19th and 20th byte appended to the input string
 
-- Manual labor of translating the instructions within the binary shows the 19th byte used as XOR, 20th byte used as SUB
+- Translating the hexdump of the binary shows one byte used as XOR, and another byte used as SUB
+
+```
+51: c0 80 cd db 31 83 8a    rol    BYTE PTR [eax-0x7cce2433],0x8a
+58: 01 30                   add    DWORD PTR [eax],esi
+5a: 00 20                   add    BYTE PTR [eax],ah
+5c: 0d 8a 01 88 00          or     eax,0x88018a
+61: 20 c8                   and    al,cl
+63: 30 15 8a 01 87 00       xor    BYTE PTR ds:0x87018a,dl
+69: 20 d0                   and    al,dl
+6b: 28 83 89 02 24 00       sub    BYTE PTR [ebx+0x240289],al
+71: 20 83 43 29 fb de       and    BYTE PTR [ebx-0x2104d6bd],al
+77: 75 06                   jne    0x7f
+```
 
 - By brute forcing the pattern, knowing its an asm challenge and the flag string ending with '\n', only one flag is found
 
