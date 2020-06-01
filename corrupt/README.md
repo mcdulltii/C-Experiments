@@ -2,7 +2,29 @@
 
 ## Solving
 
-- TBC
+- Hexdump shows stored strings and data
+
+- Tailer of executable shows print buffers and null bytes, followed by a hex array
+
+- Hex array can be inferred to be the encoded output flag
+
+### ![Executable Hexdump](img/8.png)
+
+- Dynamic analysis of executable shows the executable receiving a string of less than 50 bytes
+
+- Executable contained "Why_c4nt_1_d3c0mp1l3_th1s" as plain text string, which is the correct string input for the executable
+
+- After inputting the correct string, the executable prints "Flag: W", which is the found hex array in the executable
+
+- Hex array is encoded? The executable actually accepts a string input with more characters appended to the previous string input till 50 bytes
+
+- With trial and error, 2 bytes in the input are used in decoding the hex array, which are the 19th and 20th byte appended to the input string
+
+- Manual labor of translating the instructions within the binary shows the 19th byte used as XOR, 20th byte used as SUB
+
+- By brute forcing the pattern, knowing its an asm challenge and the flag string ending with '\n', only one flag is found
+
+### ![Decode Function](img/9.png)
 
 ## Workflow
 
