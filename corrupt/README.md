@@ -1,4 +1,4 @@
-# Dynamic
+# Corrupt
 
 ## Solving
 
