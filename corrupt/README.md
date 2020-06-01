@@ -20,7 +20,7 @@
 
 - With trial and error, 2 bytes in the input are used in decoding the hex array, which are the 19th and 20th byte appended to the input string
 
-- Translating the hexdump of the binary shows one byte used as XOR, and another byte used as SUB
+- Decompiling the hexdump of the binary shows one byte used as XOR, and another byte used as SUB
 
 ```
 51: c0 80 cd db 31 83 8a    rol    BYTE PTR [eax-0x7cce2433],0x8a
