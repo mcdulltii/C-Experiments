@@ -37,7 +37,9 @@
 
 ### ![Radare2 Disassembly](img/10.png)
 
-- With trial and error, 2 bytes in the input are used in decoding the hex array, which are the 19th and 20th byte appended to the input string
+- Two bytes in the input are used in decoding the hex array. By using a cyclic pattern on the ecx and edx registers, the bytes are found to be the 19th and 20th bytes appended to the input string
+
+### ![Radare2 Debugging](img/11.png)
 
 - By brute forcing the pattern, since the flag string is printed with '\n', only one readable flag is found
 
