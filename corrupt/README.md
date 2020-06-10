@@ -16,13 +16,11 @@
 
 - After inputting the correct string, the executable prints "Flag: W", which is the found hex array in the executable
 
-- Hex array is encoded? The executable actually accepts a string input with more characters appended to the previous string input till 50 bytes
-
-- With trial and error, 2 bytes in the input are used in decoding the hex array, which are the 19th and 20th byte appended to the input string
+- Hex array is encoded? The executable actually accepts a string input with more characters appended to the previous string input after 50 bytes
 
 - Decompiling the hexdump of the binary shows one byte used as XOR, and another byte used as SUB
 
-```
+```asm
 51: c0 80 cd db 31 83 8a    rol    BYTE PTR [eax-0x7cce2433],0x8a
 58: 01 30                   add    DWORD PTR [eax],esi
 5a: 00 20                   add    BYTE PTR [eax],ah
@@ -35,7 +33,15 @@
 77: 75 06                   jne    0x7f
 ```
 
-- By brute forcing the pattern, knowing its an asm challenge and the flag string ending with '\n', only one flag is found
+- An easier method will be to use a dynamic disassembler, Radare2!
+
+### ![Radare2 Disassembly](img/10.png)
+
+- With trial and error, 2 bytes in the input are used in decoding the hex array, which are the 19th and 20th byte appended to the input string
+
+- By brute forcing the pattern, since the flag string is printed with '\n', only one readable flag is found
+
+(Code uses variations of "A5M" for faster elimination to obtain readable flags)
 
 ### ![Decode Function](img/9.png)
 
