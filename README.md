@@ -207,3 +207,29 @@ Experiments on C Exploits
     ```
 
     Create its own library with hidden function on runtime, such that loaded function will not be shown during decompilation
+
+### - Corrupted header
+
+1. Collapse header via assembly
+
+    ### ![Corrupted header](corrupt/img/1.png)
+
+    Entrypoint of executable is fit into the Magic bytes in the ELF header, on top of the collapsed headers
+
+    Entrypoint gives problems to static debuggers and disassemblers from disassembling the full binary
+
+    Radare2 and other dynamic disassemblers are able to ignore the ELF header and follow the jump instruction after the entrypoint, thus able to disassemble much more of the executable
+
+2. Corrupt ELF headers, i.e. `e_shoff, e_shnum and e_shstrndx`
+
+    ```C
+    static Elf64_Ehdr* header;
+
+    header->e_shoff = 0xffff;
+    header->e_shnum = 0xffff;
+    header->e_shstrndx = 0xffff;
+    ```
+
+    Disassembler reads ELF binary with overflow, preventing static debuggers and disassemblers from working
+
+    Values can be also be changed to 0x0 for the opposite effect, where the disassembler is unable to read the full binary

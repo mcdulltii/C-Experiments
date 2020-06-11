@@ -16,7 +16,7 @@
 
 - After inputting the correct string, the executable prints "Flag: W", which is the found hex array in the executable
 
-- Hex array is encoded? The executable actually accepts a string input with more characters appended to the previous string input after 50 bytes
+- Hex array is encoded? The executable actually accepts a string input with more characters appended to the previous string input until 50 bytes
 
 - Decompiling the hexdump of the binary shows one byte used as XOR, and another byte used as SUB
 
